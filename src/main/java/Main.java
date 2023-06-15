@@ -1,12 +1,22 @@
+import org.neo4j.ogm.config.Configuration;
+import org.neo4j.ogm.session.SessionFactory;
+
+import javax.swing.*;
+
 public class Main {
-
-
-    public static final String DB_URI = "bolt://44.207.3.76:7687";
-    public static final String USERNAME = "neo4j";
-
     public static void main(String[] args) {
-        final SmallExample smallExample = new SmallExample(args[0], args[1], args[2]);
+        // setup DB connection
+        Configuration config = new Configuration.Builder()
+                .uri(args[0])
+                .credentials(args[1], args[2])
+                .build();
+        SessionFactory sessionFactory = new SessionFactory(config, "dto", "dto.relations");
 
-
+        // Create and show the Lecture details
+        SwingUtilities.invokeLater(() -> {
+            LectureScreen lectureScreen = new LectureScreen(sessionFactory);
+            lectureScreen.setVisible(true);
+        });
     }
 }
+
